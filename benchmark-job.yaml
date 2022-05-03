@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: alluxiofuse-benchmark-job
+  labels:
+    jobgroup: alluxiofuse-benchmark
+spec:
+  completions: 8
+  parallelism: 2
+  template:
+    metadata:
+      name: alluxiofuse-benchmark-job
+      labels:
+        jobgroup: alluxiofuse-benchmark
+    spec:
+      containers:
+      - name: alluxiofuse-benchmark-job
+        image: iluoeli/bench-fuse:v0
+        command: ["/app/read_file.sh"]
+        #args: ["/app/generate_file.sh"]
+        volumeMounts:
+          - mountPath: /data
+            name: coco
+        env:
+          - name: WORKERS_PER_NODE
+            value: "1"
+          - name: THREADS
+            value: "1"
+          - name: DATA_PATH
+            value: "/data/coco"
+      volumes:
+        - name: coco
+          persistentVolumeClaim:
+            claimName: coco
+      restartPolicy: OnFailure
+

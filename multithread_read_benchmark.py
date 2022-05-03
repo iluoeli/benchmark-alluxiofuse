@@ -51,5 +51,7 @@ if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument('--threads', type=int, default=2,
                       help='The number of threads')
+  parser.add_argument('--datapath', type=str, default="/data",
+                      help='The path to data folder')
   FLAGS, unparsed = parser.parse_known_args()
-  test_db("/data/*", FLAGS.threads)
+  test_db(FLAGS.datapath + "/*", FLAGS.threads)

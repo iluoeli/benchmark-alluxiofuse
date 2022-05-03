@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: benchmark-alluxio-fuse
+spec:
+  containers:
+    - name: demo
+      image: bench-fuse:v0
+      command: ["bash"]
+      args: ["/app/generate_file.sh"]
+      volumeMounts:
+        - mountPath: /data
+          name: coco
+      env:
+      - name: WORKERS_PER_NODE
+        value: 1
+      - name: THREADS
+        value: 1
+  volumes:
+    - name: coco
+      persistentVolumeClaim:
+        claimName: coco

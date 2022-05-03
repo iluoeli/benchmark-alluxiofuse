@@ -1,0 +1,32 @@
+apiVersion: data.fluid.io/v1alpha1
+kind: Dataset
+metadata:
+  name: coco
+spec:
+  mounts:
+  - mountPoint: local:///tmp/data
+    name: coco
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: coco
+              operator: In
+              values:
+                - coco
+---
+apiVersion: data.fluid.io/v1alpha1
+kind: AlluxioRuntime
+metadata:
+  name: coco
+spec:
+  replicas: 2
+  data:
+    replicas: 1
+  tieredstore:
+    levels:
+      - mediumtype: MEM
+        path: /alluxio/ram 
+        quota: 50Gi
+        high: "0.99"
+        low: "0.8"
